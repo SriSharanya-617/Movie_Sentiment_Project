@@ -63,7 +63,9 @@ def prepare_input(review):
 
     review = preprocess_text(review)
 
-    sequence = tokenizer.texts_to_sequences([review])
+    sequence = tokenizer.texts_to_sequences(
+        [review]
+    )
 
     padded = pad_sequences(
         sequence,
@@ -243,7 +245,7 @@ if st.button("Analyze Review"):
         )
 
         # --------------------------------------
-        # CHART
+        # CONFIDENCE CHART (SMALLER)
         # --------------------------------------
 
         st.subheader(
@@ -262,7 +264,7 @@ if st.button("Analyze Review"):
         })
 
         fig, ax = plt.subplots(
-            figsize=(6,4)
+            figsize=(4, 2.5)
         )
 
         ax.bar(
@@ -270,15 +272,20 @@ if st.button("Analyze Review"):
             chart_df["Probability"]
         )
 
-        ax.set_ylabel(
-            "Probability (%)"
-        )
+        ax.set_ylabel("%")
+
+        ax.set_ylim(0, 100)
 
         ax.set_title(
             "Sentiment Probability"
         )
 
-        st.pyplot(fig)
+        plt.tight_layout()
+
+        col1, col2, col3 = st.columns([1, 2, 1])
+
+        with col2:
+            st.pyplot(fig)
 
         st.markdown("---")
 
@@ -294,11 +301,20 @@ if st.button("Analyze Review"):
 
         for model_name, model in [
 
-            ("SimpleRNN", simple_rnn_model),
+            (
+                "SimpleRNN",
+                simple_rnn_model
+            ),
 
-            ("LSTM", lstm_model),
+            (
+                "LSTM",
+                lstm_model
+            ),
 
-            ("GRU", gru_model)
+            (
+                "GRU",
+                gru_model
+            )
 
         ]:
 
